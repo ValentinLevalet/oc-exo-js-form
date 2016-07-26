@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        label {
+            display: block;
+            margin: 1em 0;
+            position: relative;
+        }
+
+        input, fieldset, select {
+            border: solid 3px grey;
+        }
+
+        .bubulle {
+            display: none;
+            background-color: #aaa;
+            color: white;
+            font-size: 90%;
+            padding: 2px 9px;
+            border-radius: 2px;
+            right: 0px;
+            position: absolute;
+            top: -10px;
+        }
+    </style>
+</head>
+<body>
+    <form>
+        <fieldset>
+            <legend>Sexe</legend>
+            <label>Homme <input type="radio" name="sexe"/></label>
+            <label>Femme <input type="radio" name="sexe"/></label>
+        </fieldset>
+        <label>Nom <input type="text" id="nom"><span class="bubulle">Pas moins de 2 caractères</span></label>
+        <label>Prénom <input type="text" id="prenom"></label>
+        <label>Âge <input type="text" id="age"></label>
+        <label>Pseudo <input type="text" id="pseudo"></label>
+        <label>Mot de passe <input type="password" id="mdp"></label>
+        <label>Mot de passe (confirmation) <input type="password" id="mdpConf"></label>
+        <label>Pays
+            <select>
+                <option>France</option>    
+                <option>Angleterre</option>    
+                <option>Allemagne</option>    
+            </select>
+        </label>
+        <label>Si l'utilisateur souhaite recevoir des mails <input type="checkbox"></label>
+        <input type="submit" id="submit">
+    </form>
+    <script>
+
+        var inputs = document.getElementsByTagName('input');
+
+        for (i = 0; i < inputs.length; i++) {
+
+            inputs[i].addEventListener('keyup', function(){
+
+                if(this.id == 'nom' || this.id == 'prenom')
+                    verifLongueur(this, 2);
+
+                if(this.id == 'age')
+                    verifAge(this, this.value)
+
+                if(this.id == 'pseudo')
+                    verifLongueur(this, 4);
+
+                if(this.id == 'mdpConf')
+                    verifMdp(this, this.value);
+                if(this.id == 'mdp' || this.id == 'mdpConf')
+                    verifLongueur(this, 6);
+
+            });
+        }
+
+        function verifFormulaire(){
+            var genre = document.getElementsByName('sexe');
+            for(i = 0; i < genre.length; i++){
+                if(genre[i].checked == true)
+                    genre[i].parentElement.parentElement.style.backgroundColor = 'rgb(158,255,158)';
+                else
+                    genre[i].parentElement.parentElement.style.backgroundColor = 'rgb(255,193,193)';
+            }
+
+        }
+
+        function verifLongueur(element, longueur){
+            setTimeout(function(){
+                console.log(element);
+                if(element.value.length == 0)
+                    element.style.backgroundColor = 'rgb(255,255,255)';
+                else if(longueur > element.value.length){
+                    element.style.backgroundColor = 'rgb(255,193,193)';
+                    element.nextSibling.style.display = 'inline-block'
+                }
+                else 
+                    element.style.backgroundColor = 'rgb(158,255,158)';
+            }, 500);
+        };
+
+        function verifAge(element, ageSaisi){
+            setTimeout(function(){
+                verifNan = isNaN(ageSaisi);
+                if(element.value.length == 0)
+                    element.style.backgroundColor = 'rgb(255,255,255)';
+                else if(ageSaisi < 5 || ageSaisi > 140 || verifNan == true)
+                    element.style.backgroundColor = 'rgb(255,193,193)';
+                else
+                    element.style.backgroundColor = 'rgb(158,255,158)';
+            }, 500);
+        };
+
+        function verifMdp(element, mdpSaisi){
+            var mdpBase = document.getElementById('mdp').value;
+            if(mdpSaisi == mdpBase)
+                element.style.backgroundColor = 'rgb(158,255,158)';
+            else
+                element.style.backgroundColor = 'rgb(255,193,193)';
+        };
+
+        var btSubmit = document.getElementById('submit');
+
+        btSubmit.addEventListener('click', function (e) {
+            e.preventDefault();
+            verifFormulaire();
+        });
+
+    </script>
+);</body>
+</html>
